@@ -7,7 +7,6 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-
 export default function LoginScreen() {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">

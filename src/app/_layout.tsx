@@ -6,7 +6,9 @@ import {
   useFonts,
 } from "@expo-google-fonts/poppins";
 import { Slot } from "expo-router";
+import { Provider } from "react-redux";
 import { AuthUser } from "../service/auth";
+import { store } from "../store/store";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -21,7 +23,9 @@ export default function RootLayout() {
   }
   return (
     <AuthUser>
-      <Slot />
+      <Provider store={store}>
+        <Slot />
+      </Provider>
     </AuthUser>
   );
 }
