@@ -1,18 +1,32 @@
 import { useLoginForm, useSubmitLogin } from "@/src/hooks/login/useLogin";
+import { useAppDispatch, useTypedSelector } from "@/src/store/store";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import { Controller } from "react-hook-form";
-import { Text, TextInput, View } from "react-native";
+import { Button, Text, TextInput, View } from "react-native";
 import ButtonComponent from "../button";
 import ErrorComponent from "../errors";
 import { styles } from "./style";
 
 export default function LoginComponent() {
+  const dispatch = useAppDispatch();
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
   const { control, register, handleSubmit, errors } = useLoginForm();
 
+  const { data, error, loading, success } = useTypedSelector(
+    (state) => state.getUserReducer,
+  );
+
+  const login = () => {
+    // dispatch(loginAsync());
+  };
+
+  console.log("user", data);
+  console.log("error", error);
+  console.log("success", success);
+  console.log("loading", loading);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -23,6 +37,7 @@ export default function LoginComponent() {
         <Text style={styles.subHeaderDescription}>
           Entre com seus dados de cadastro
         </Text>
+        <Button title="Teste" onPress={login} />
       </View>
       <View style={styles.form}>
         <Controller

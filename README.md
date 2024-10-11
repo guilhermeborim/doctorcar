@@ -1,48 +1,102 @@
-# Bem vindo ao meu aplicativo DoctorCar 👋
+REDUX - PASSO A PASSO
 
-## Vamos começar
+- Primeiro configurar a url_helper
+- Segundo configurar o backend_helper
+- Terceiro criar a pasta do estado (user, maintenance, vehicle)...
+- Quarto criar o arquivo actionTypes.ts e definir elas
+  ex:
+  `   export const LOGIN = "user/login";`
+- Quinta criar o arquivo actions.ts e definir elas
+  ex:
+  `
+  import { getLogin } from "@/src/service/backend_helper";
+  import { createAsyncThunk, isRejectedWithValue } from "@reduxjs/toolkit";
+  export const loginAsync = createAsyncThunk(
+  "user/loginAsync",
+  async (\_, { rejectWithValue }) => {
+  try {
+  const response = await getLogin();
+  return response.data;
+  } catch (error: any) {
+  return isRejectedWithValue(error.message);
+  }
 
-1. Install dependencies
+  },
+  );
+  `
 
-   ```bash
-   npm install
-   ```
+- Sexto criar o arquivo reducer.ts e definir
+  `
+  import { createSlice } from "@reduxjs/toolkit";
+  import { loginAsync } from "./actions";
 
-2. Start the app
+  // cria o estado inicial
+  const initialState = {
+  user: null,
+  status: "",
+  success: false,
+  };
 
-   ```bash
-    npx expo start
-   ```
+  const userSlice = createSlice({
+  name: "user",
+  initialState,
+  // aqui vc coloca os reducers que nao são async
+  reducers: {
+  logout: (state) => {
+  state.user = null;
+  },
+  },
+  // reducers que são async
+  extraReducers(builder) {
+  builder.addCase(loginAsync.fulfilled, (state, action) => {
+  // aqui vc coloca as info que estão vindo da api. data, status etc..
+  state.user = action.payload.data;
+  state.success = true;
+  state.status = action.payload.status;
+  });
+  builder.addCase(loginAsync.rejected, (state, action) => {
+  state.success = false;
+  state.status = "rejeitado";
+  });
+  },
+  });
 
-In the output, you'll find options to open the app in a
+  // aqui só precisa importar o reducer que não são async
+  export const { logout } = userSlice.actions;
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+  export default userSlice.reducer;
+  `
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+  - Sétimo importar o reducer no arquivo reducers.ts
 
-## Get a fresh project
+  USANDO NO COMPONENTE
 
-When you're ready, run:
+  ex:
+  `
+  import { useAppDispatch, useTypedSelector } from "@/src/store/store";
+  import { loginAsync } from "@/src/store/user/actions";
 
-```bash
-npm run reset-project
-```
+  const dispatch = useAppDispatch();
+  const { user, status, success } = useTypedSelector((state) => state.user);
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+  const login = () => {
+  dispatch(loginAsync());
+  };
 
-## Learn more
+  console.log("user", user);
+  `
 
-To learn more about developing your project with Expo, look at the following resources:
+TIPAGEM DO DATA REDUCER EX:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+`  
+  const initialState: {
+  data: GetUser | null;
+  loading: boolean;
+  success: boolean;
+  error: boolean;
+} = {
+  data: null,
+  loading: false,
+  success: false,
+  error: false,
+};`
