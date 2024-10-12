@@ -1,6 +1,6 @@
 import { colors } from "@/src/constants";
 import family from "@/src/constants/family";
-import { statusBarHeight } from "@/src/hooks/statusBarHeight";
+import { statusBarHeight } from "@/src/constants/statusBarHeight";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({

@@ -1,32 +1,49 @@
-import { useLoginForm, useSubmitLogin } from "@/src/hooks/login/useLogin";
 import { useAppDispatch, useTypedSelector } from "@/src/store/store";
+import { loginAsync } from "@/src/store/user/login/actions";
+import { resetUserFlag } from "@/src/store/user/login/reducer";
+import { LoginUser } from "@/src/types/user";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
-import React, { useState } from "react";
-import { Controller } from "react-hook-form";
-import { Button, Text, TextInput, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, Text, TextInput, View } from "react-native";
 import ButtonComponent from "../button";
-import ErrorComponent from "../errors";
 import { styles } from "./style";
 
 export default function LoginComponent() {
   const dispatch = useAppDispatch();
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
-  const { control, register, handleSubmit, errors } = useLoginForm();
+  const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
+  const [inputValue, setInputValue] = useState<LoginUser>({
+    email: "",
+    password: "",
+  });
 
-  const { data, error, loading, success } = useTypedSelector(
-    (state) => state.getUserReducer,
+  const { error, success } = useTypedSelector(
+    (state) => state.loginUserReducer,
   );
-
-  const login = () => {
-    // dispatch(loginAsync());
+  const onChangeInputValue = (key: string, value: string) => {
+    setInputValue({ ...inputValue, [key]: value });
   };
 
-  console.log("user", data);
-  console.log("error", error);
-  console.log("success", success);
-  console.log("loading", loading);
+  const onSubmit = () => {
+    if (!inputValue.email || !inputValue.password) {
+      Alert.alert("Preencha todos os campos");
+      return;
+    }
+    dispatch(loginAsync(inputValue));
+  };
+
+  useEffect(() => {
+    if (success) {
+      dispatch(resetUserFlag());
+      router.replace("/dashboard");
+    }
+    if (error && !success) {
+      Alert.alert("Erro", error);
+    }
+  }, [success, error]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -37,63 +54,40 @@ export default function LoginComponent() {
         <Text style={styles.subHeaderDescription}>
           Entre com seus dados de cadastro
         </Text>
-        <Button title="Teste" onPress={login} />
       </View>
       <View style={styles.form}>
-        <Controller
-          name="email"
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <View>
-              <TextInput
-                placeholder="E-mail"
-                {...register("email")}
-                value={value}
-                style={[
-                  styles.InputEmail,
-                  isFocusedEmail ? styles.inputFocus : styles.inputBlur,
-                ]}
-                onFocus={() => setIsFocusedEmail(true)}
-                onBlur={() => setIsFocusedEmail(false)}
-                onChangeText={(value) => onChange(value)}
-              />
-              <ErrorComponent message={errors.email?.message} />
-            </View>
-          )}
+        <TextInput
+          placeholder="E-mail"
+          style={[
+            styles.InputEmail,
+            isFocusedEmail ? styles.inputFocus : styles.inputBlur,
+          ]}
+          onFocus={() => setIsFocusedEmail(true)}
+          onBlur={() => setIsFocusedEmail(false)}
+          onChangeText={(text) => onChangeInputValue("email", text)}
         />
-        <Controller
-          name="password"
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <>
-              <View
-                style={[
-                  styles.formPassword,
-                  isFocusedPassword ? styles.inputFocus : styles.inputBlur,
-                ]}
-              >
-                <TextInput
-                  placeholder="Senha"
-                  {...register("password")}
-                  value={value}
-                  style={styles.inputPassword}
-                  onFocus={() => setIsFocusedPassword(true)}
-                  onBlur={() => setIsFocusedPassword(false)}
-                  onChangeText={(value) => onChange(value)}
-                  secureTextEntry
-                />
-                <FontAwesome name="eye" size={20} />
-              </View>
-              <ErrorComponent message={errors.password?.message} />
-            </>
-          )}
-        />
-        <View style={styles.containerButton}>
-          <ButtonComponent
-            primary
-            text="Entrar"
-            onPress={handleSubmit(useSubmitLogin)}
+        <View
+          style={[
+            styles.formPassword,
+            isFocusedPassword ? styles.inputFocus : styles.inputBlur,
+          ]}
+        >
+          <TextInput
+            placeholder="Senha"
+            style={styles.inputPassword}
+            onFocus={() => setIsFocusedPassword(true)}
+            onBlur={() => setIsFocusedPassword(false)}
+            secureTextEntry={isSecureTextEntry}
+            onChangeText={(text) => onChangeInputValue("password", text)}
           />
+          <FontAwesome
+            name="eye"
+            size={20}
+            onPress={() => setIsSecureTextEntry(!isSecureTextEntry)}
+          />
+        </View>
+        <View style={styles.containerButton}>
+          <ButtonComponent primary text="Entrar" onPress={onSubmit} />
           <View style={styles.containerForget}>
             <Text style={styles.forgetPassword}>Esqueceu a senha?</Text>
             <Link href={"/change-password"}>

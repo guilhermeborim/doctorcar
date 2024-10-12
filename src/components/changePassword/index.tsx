@@ -1,20 +1,12 @@
-import {
-  useChangePasswordForm,
-  useSubmitChangePassword,
-} from "@/src/hooks/change-password/useChangePassword";
-import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
-import { Controller } from "react-hook-form";
-import { Text, TextInput, View } from "react-native";
+import { Text, View } from "react-native";
 import ButtonComponent from "../button";
-import ErrorComponent from "../errors";
 import { styles } from "./style";
 
 export default function ChangePasswordComponent() {
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
-  const { handleSubmit, register, control, errors } = useChangePasswordForm();
 
   return (
     <View style={styles.container}>
@@ -28,7 +20,7 @@ export default function ChangePasswordComponent() {
         </Text>
       </View>
       <View style={styles.form}>
-        <Controller
+        {/* <Controller
           name="email"
           control={control}
           render={({ field: { onChange, value } }) => (
@@ -49,8 +41,8 @@ export default function ChangePasswordComponent() {
               <ErrorComponent message={errors.email?.message} />
             </>
           )}
-        />
-        <Controller
+        /> */}
+        {/* <Controller
           name="oldPassword"
           control={control}
           render={({ field: { onChange, value } }) => (
@@ -112,7 +104,7 @@ export default function ChangePasswordComponent() {
             text="Nova senha"
             onPress={handleSubmit(useSubmitChangePassword)}
           />
-        </View>
+        </View> */}
       </View>
       <Text style={styles.textSpan}>Já possui uma conta?</Text>
       <ButtonComponent

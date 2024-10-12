@@ -8,7 +8,7 @@ export interface GetUser {
   name: string;
   email: string;
   password: string;
-  profilePicture: string;
+  profile_picture: string;
 }
 
 export interface LoginUser {
@@ -16,6 +16,9 @@ export interface LoginUser {
   password: string;
 }
 
+export interface LoginResponse {
+  token: string;
+}
 export interface ChangePasswordUser {
   email: string;
   oldPassword: string;

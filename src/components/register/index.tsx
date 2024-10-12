@@ -1,21 +1,13 @@
-import {
-  useRegisterForm,
-  useSubmitRegister,
-} from "@/src/hooks/register/useRegister";
-import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
-import { Controller } from "react-hook-form";
-import { Text, TextInput, View } from "react-native";
+import { Text, View } from "react-native";
 import ButtonComponent from "../button";
-import ErrorComponent from "../errors";
 import { styles } from "./style";
 
 export default function RegisterComponent() {
   const [isFocusedName, setIsFocusedName] = useState(false);
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
-  const { handleSubmit, register, control, errors } = useRegisterForm();
 
   return (
     <View style={styles.container}>
@@ -28,7 +20,7 @@ export default function RegisterComponent() {
           Por favor, informe suas informações
         </Text>
       </View>
-      <View style={styles.form}>
+      {/* <View style={styles.form}>
         <Controller
           name="name"
           control={control}
@@ -112,7 +104,7 @@ export default function RegisterComponent() {
             </Text>
           </View>
         </View>
-      </View>
+      </View> */}
       <ButtonComponent
         text="Entrar"
         primary={false}

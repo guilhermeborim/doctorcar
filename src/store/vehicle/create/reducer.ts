@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createAsync } from "./actions";
+import { vehicleAsync } from "./actions";
 
 const initialState = {
   data: [],
@@ -8,7 +8,7 @@ const initialState = {
   error: false,
 };
 
-const postUserSlice = createSlice({
+const postVehicleSlice = createSlice({
   name: "postUser",
   initialState,
   reducers: {
@@ -20,22 +20,22 @@ const postUserSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(createAsync.pending, (state, action) => {
+    builder.addCase(vehicleAsync.pending, (state, action) => {
       state.loading = true;
       state.success = false;
       state.error = false;
     });
-    builder.addCase(createAsync.fulfilled, (state, action) => {
+    builder.addCase(vehicleAsync.fulfilled, (state, action) => {
       state.loading = false;
       state.success = true;
     });
-    builder.addCase(createAsync.rejected, (state, action) => {
+    builder.addCase(vehicleAsync.rejected, (state, action) => {
       state.success = false;
       state.error = true;
     });
   },
 });
 
-export const { resetUserFlag } = postUserSlice.actions;
+export const { resetUserFlag } = postVehicleSlice.actions;
 
-export default postUserSlice.reducer;
+export default postVehicleSlice.reducer;
