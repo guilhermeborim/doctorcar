@@ -3,7 +3,7 @@ import { loginAsync } from "@/src/store/user/login/actions";
 import { resetUserFlag } from "@/src/store/user/login/reducer";
 import { LoginUser } from "@/src/types/user";
 import { FontAwesome } from "@expo/vector-icons";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Alert, Text, TextInput, View } from "react-native";
 import ButtonComponent from "../button";
@@ -37,7 +37,7 @@ export default function LoginComponent() {
   useEffect(() => {
     if (success) {
       dispatch(resetUserFlag());
-      router.replace("/dashboard");
+      router.replace("/(tabs)/dashboard/home");
     }
     if (error && !success) {
       Alert.alert("Erro", error);
@@ -90,9 +90,7 @@ export default function LoginComponent() {
           <ButtonComponent primary text="Entrar" onPress={onSubmit} />
           <View style={styles.containerForget}>
             <Text style={styles.forgetPassword}>Esqueceu a senha?</Text>
-            <Link href={"/change-password"}>
-              <Text style={styles.newPassword}>Nova senha</Text>
-            </Link>
+            <Text style={styles.newPassword}>Nova senha</Text>
           </View>
         </View>
       </View>

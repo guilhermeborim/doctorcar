@@ -2,8 +2,9 @@ import { MaintenanceExpires } from "@/src/features/maintenance/index";
 import { VehicleDashboard } from "@/src/features/vehicles/index";
 import { useAppDispatch, useTypedSelector } from "@/src/store/store";
 import { getUserAsync } from "@/src/store/user/get/actions";
+import { router } from "expo-router";
 import { useEffect } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
 import Banner from "../banner";
 import { styles } from "./style";
 
@@ -25,6 +26,9 @@ export default function DashboardComponent() {
           <View>
             <Text style={styles.welcome}>Seja Bem-Vindo</Text>
             <Text style={styles.name}>{data?.name}</Text>
+            <Pressable onPress={() => router.push("/vehicle")}>
+              <Text>Veiculo</Text>
+            </Pressable>
           </View>
           <Image
             source={{ uri: data?.profile_picture }}

@@ -12,7 +12,7 @@ export const AuthUser = ({ children }: { children: React.ReactNode }) => {
       const tokenIsValid = await checkTokenExpiration(token);
 
       if (tokenIsValid) {
-        router.replace("/dashboard");
+        router.replace("/(tabs)/dashboard/home");
       } else {
         router.replace("/login");
       }
