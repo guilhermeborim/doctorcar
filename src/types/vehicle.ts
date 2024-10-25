@@ -8,3 +8,11 @@ export interface PostVehicle {
   owner_id: string;
   state_vehicle_id: string;
 }
+
+export interface GetVehicle {
+  model: string;
+  license_plate: string;
+  year: number;
+  kilometers_driven: number;
+  daily_mileage: number;
+}

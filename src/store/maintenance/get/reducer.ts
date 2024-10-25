@@ -1,9 +1,9 @@
-import { GetVehicle } from "@/src/types/vehicle";
+import { GetMaintenance } from "@/src/types/maintenance";
 import { createSlice } from "@reduxjs/toolkit";
-import { getVehicleAsync } from "./actions";
+import { getMaintenanceAsync } from "./actions";
 
 const initialState: {
-  data: GetVehicle[] | [];
+  data: GetMaintenance[] | [];
   loading: boolean;
   success: boolean;
   error: boolean;
@@ -15,7 +15,7 @@ const initialState: {
 };
 
 const getVehicleSlice = createSlice({
-  name: "getVehicle",
+  name: "getMaintenance",
   initialState,
   reducers: {
     resetVehicleFlag: (state) => {
@@ -26,13 +26,13 @@ const getVehicleSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(getVehicleAsync.fulfilled, (state, action) => {
+    builder.addCase(getMaintenanceAsync.fulfilled, (state, action) => {
       state.data = action.payload;
       state.success = true;
       state.error = false;
       state.loading = false;
     });
-    builder.addCase(getVehicleAsync.rejected, (state, action) => {
+    builder.addCase(getMaintenanceAsync.rejected, (state, action) => {
       state.success = false;
       state.error = true;
       state.loading = false;

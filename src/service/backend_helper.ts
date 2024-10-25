@@ -1,3 +1,4 @@
+import { GetMaintenance } from "../types/maintenance";
 import {
   ChangePasswordUser,
   GetUser,
@@ -5,9 +6,9 @@ import {
   LoginUser,
   PostUser,
 } from "../types/user";
-import { PostVehicle } from "../types/vehicle";
+import { GetVehicle, PostVehicle } from "../types/vehicle";
 import { ApiResponse, get, post } from "./axios";
-import { USER } from "./url_helper";
+import { USER, VEHICLE } from "./url_helper";
 
 // User
 // export const postUser = async (
@@ -46,5 +47,19 @@ export class UserService {
 export class VehicleService {
   static postVehicle = async (data: PostVehicle) => {
     return await post(USER, data);
+  };
+
+  static getVehicle = async (): Promise<
+    ApiResponse<{ data: GetVehicle[] }>
+  > => {
+    return await get<{ data: GetVehicle[] }>(VEHICLE);
+  };
+}
+
+export class MaintenanceService {
+  static getMaintenance = async (): Promise<
+    ApiResponse<{ data: GetMaintenance[] }>
+  > => {
+    return await get<{ data: GetMaintenance[] }>(VEHICLE);
   };
 }
